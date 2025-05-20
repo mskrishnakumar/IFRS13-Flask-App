@@ -7,7 +7,8 @@ app = Flask(__name__)
 
 # Azure ML endpoint and API key
 ENDPOINT = "https://uksouthwg-ncnbx.uksouth.inference.ml.azure.com/score"
-API_KEY = os.environ.get("AZURE_API_KEY", "9dn8tl8uokxUFnwXZVAPJ05hFKQKuyO2xVsNK3DmZ7rbzFeZQPvIJQQJ99BEAAAAAAAAAAAAINFRAZML1wGC")
+API_KEY = os.environ["AZURE_API_KEY"]
+
 
 @app.route('/')
 def index():
