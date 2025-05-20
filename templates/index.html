@@ -95,7 +95,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>🔍 IFRS 13 Fair Value Level Classifier</h1>
+    <h1>IFRS 13 Fair Value Level Classifier - Experiment 27</h1>
     <form action="/predict" method="post">
       {% for label, name, type, options in [
         ("Instrument Type", "instrument_type", "select", ["Bond", "Loan", "Derivative"]),
@@ -139,7 +139,7 @@
 
     {% if summary %}
     <div class="summary">
-      <h3>📝 Input Summary:</h3>
+      <h3><strong>Input Summary:</strong></h3>
       <ul>
         {% for key, value in summary.items() %}
           <li><strong>{{ key.replace('_', ' ').title() }}</strong>: {{ value }}</li>
@@ -149,7 +149,7 @@
     {% endif %}
 
     {% if prediction %}
-      <div class="result">🎯 <strong>Model Prediction : </strong> {{ prediction }}</div>
+      <div class="result"><strong>Model Prediction : </strong> {{ prediction }}</div>
     {% endif %}
   </div>
 </body>
