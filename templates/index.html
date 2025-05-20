@@ -1,0 +1,155 @@
+# templates/index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>IFRS 13 Classifier</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #e0f7fa, #f1f8e9);
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 700px;
+      background: white;
+      margin: 3rem auto;
+      padding: 2rem 3rem;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    }
+    h1 {
+      text-align: center;
+      color: #00695c;
+      margin-bottom: 1.5rem;
+    }
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 0.4rem;
+      color: #333;
+    }
+    select, input[type=number], input[type=range] {
+      width: 100%;
+      padding: 0.6rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    input[type=range] {
+      accent-color: #00796b;
+    }
+    .slider-value {
+      font-weight: bold;
+      margin-top: -0.4rem;
+      margin-bottom: 1rem;
+      text-align: right;
+      color: #4e342e;
+    }
+    button {
+      display: block;
+      width: 100%;
+      padding: 0.8rem;
+      font-size: 1.1rem;
+      color: white;
+      background: #00796b;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #004d40;
+    }
+    .result {
+      margin-top: 2rem;
+      font-size: 1.2rem;
+      text-align: left;
+      padding: 1rem;
+      border-radius: 8px;
+      background-color: #e8f5e9;
+      color: #2e7d32;
+      border: 1px solid #c8e6c9;
+    }
+    .summary {
+      margin-top: 2rem;
+      padding: 1rem;
+      border-radius: 8px;
+      background-color: #f1f8e9;
+      border: 1px solid #c5e1a5;
+      color: #33691e;
+    }
+  </style>
+  <script>
+    function updateSliderValue(id, displayId) {
+      var val = document.getElementById(id).value;
+      document.getElementById(displayId).innerText = val;
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>🔍 IFRS 13 Fair Value Level Classifier</h1>
+    <form action="/predict" method="post">
+      {% for label, name, type, options in [
+        ("Instrument Type", "instrument_type", "select", ["Bond", "Loan", "Derivative"]),
+        ("Market Price Available", "market_price_available", "select", ["True", "False"]),
+        ("Pricing Input Type", "pricing_input_type", "select", ["Observable", "Unobservable"]),
+        ("Valuation Method", "valuation_method", "select", ["Mark-to-Market", "Model-based"]),
+        ("Trade Currency", "trade_currency", "select", ["INR", "USD", "EUR"]),
+        ("Instrument Rating", "instrument_rating", "select", ["AAA", "AA", "A", "BBB", "BB", "B"])] %}
+      <div class="form-group">
+        <label>{{ label }}</label>
+        <select name="{{ name }}">
+          {% for opt in options %}<option value="{{ opt }}">{{ opt }}</option>{% endfor %}
+        </select>
+      </div>
+      {% endfor %}
+
+      <div class="form-group">
+        <label>Trade Volume</label>
+        <input type="number" name="trade_volume" required>
+      </div>
+
+      <div class="form-group">
+        <label>30-Day Price Volatility</label>
+        <input type="range" min="0" max="1" step="0.01" name="price_volatility_30d" id="price_volatility_30d" oninput="updateSliderValue('price_volatility_30d', 'vol_val')">
+        <div class="slider-value">Value: <span id="vol_val">0.50</span></div>
+      </div>
+
+      <div class="form-group">
+        <label>Days Since Last Trade</label>
+        <input type="number" name="days_since_last_trade" required>
+      </div>
+
+      <div class="form-group">
+        <label>Avg Curve Observability</label>
+        <input type="range" min="0" max="1" step="0.01" name="avg_curve_observability" id="avg_curve_observability" oninput="updateSliderValue('avg_curve_observability', 'curve_val')">
+        <div class="slider-value">Value: <span id="curve_val">0.50</span></div>
+      </div>
+
+      <button type="submit">🔮 Predict IFRS 13 Level</button>
+    </form>
+
+    {% if summary %}
+    <div class="summary">
+      <h3>📝 Input Summary:</h3>
+      <ul>
+        {% for key, value in summary.items() %}
+          <li><strong>{{ key.replace('_', ' ').title() }}</strong>: {{ value }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+    {% if prediction %}
+      <div class="result">🎯 Prediction: {{ prediction }}</div>
+    {% endif %}
+  </div>
+</body>
+</html>
