@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>IFRS 13 Classifier</title>
+  <title>IFRS 13 Classifier - Experiment 27</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -68,13 +68,14 @@
     }
     .result {
       margin-top: 2rem;
-      font-size: 1.2rem;
-      text-align: left;
+      font-size: 1.4rem;
+      font-weight: bold;
+      text-align: center;
       padding: 1rem;
       border-radius: 8px;
-      background-color: #e8f5e9;
-      color: #2e7d32;
-      border: 1px solid #c8e6c9;
+      background-color: #d0f8ce;
+      color: #1b5e20;
+      border: 2px solid #66bb6a;
     }
     .summary {
       margin-top: 2rem;
@@ -148,7 +149,7 @@
     {% endif %}
 
     {% if prediction %}
-      <div class="result">🎯 Prediction: {{ prediction }}</div>
+      <div class="result">🎯 <strong>Model Prediction : </strong> {{ prediction }}</div>
     {% endif %}
   </div>
 </body>
